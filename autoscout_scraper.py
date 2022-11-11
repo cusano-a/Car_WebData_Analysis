@@ -130,7 +130,6 @@ if __name__ == '__main__':
             visited_urls.append(URL)
         except Exception as e:
             if db: print(f"Error car {ii+1}: " + str(e) +" "*10)
-            pass
     print("\nAll cars processed")
 
     #Saving results
