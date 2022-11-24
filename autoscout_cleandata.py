@@ -96,6 +96,8 @@ def extract_text_data(df):
     consumo_urb_L100km_pat = r'(\d+\.?\d*)\sl/100\skm\s\(urb'
     consumo_extraurb_L100km_pat = r'(\d+\.?\d*)\sl/100\skm\s\(extraurb'
 
+    df['Anno'] = pd.to_datetime(df['Anno'], format="%m/%Y")
+
     km_columns = ['Chilometraggio']
     price_columns = ['Prezzo_auto', 'price', 'Acconto']
 
@@ -238,12 +240,13 @@ if __name__ == '__main__':
 
     # Check/Create folders for results
     initWSCleaner()
-    df_main = pd.read_csv(path_to_full_dataset, sep=";", index_col='url')
     if refresh:
         added_batches = []
+        df_main = pd.DataFrame(columns=main_columns)
     else:
         with open(path_to_added_batches) as file:
             added_batches = json.load(file)
+        df_main = pd.read_csv(path_to_full_dataset, sep=";", index_col='url')
 
     # Getting target list
     targets = getTargets(target, added_batches)
@@ -263,7 +266,10 @@ if __name__ == '__main__':
             print(f"Error in dataset {tar}: {e}")
             continue
         df_main = pd.concat([df_main, df])
-    
+
+    #Dropping duplicates
+    df_main = df_main[~df_main.index.duplicated(keep='first')]
+
     print("\nAll targets processed")
     print(f"Main dataset now contains {len(df_main)} records")
     # Saving results
