@@ -25,10 +25,10 @@ def run_scraper(python_command, scraper_path):
 if __name__ == '__main__':
 
     python_command = get_python_command()  
-    scraper_path = get_test_path()
+    scraper_path = get_scraper_path()
 
     sched = BlockingScheduler()
-    sched.add_job(run_scraper, 'interval', seconds=10, args=[python_command, scraper_path])
+    sched.add_job(run_scraper, 'interval', hours=1, args=[python_command, scraper_path])
 
     try:
         sched.start()
