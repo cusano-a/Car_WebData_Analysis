@@ -135,6 +135,8 @@ Report/
 
 #Input/Output Files
 data/
+catboost_info/
+models/
 
 #Other
 .DS_Store
