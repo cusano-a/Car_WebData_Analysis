@@ -80,6 +80,12 @@ def drop_columns(df):
     df = df.drop(columns=col_to_remove)
     return df
 
+def add_missing_columns(df):
+    "Add columns in main_columns not found in processed DataFrame, filled with None"
+    col_to_add = [col for col in main_columns if col not in df.columns]
+    for col in col_to_add:
+        df[col] = None
+    return df
 
 def extract_text_data(df):
     "Applies regex to extract data from descriptions"
@@ -160,6 +166,7 @@ def replace_values(df):
 
 def clean_data(df):
     df = edit_index_columns(df)
+    df = add_missing_columns(df)
     df = extract_text_data(df)
     df = replace_values(df)
     df = drop_columns(df)
