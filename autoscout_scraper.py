@@ -6,7 +6,13 @@ from datetime import datetime
 import regex as re
 import os
 import pandas as pd
+from dotenv import load_dotenv
 
+#Load the url of the used cars website
+load_dotenv()
+used_cars_website = os.environ.get('USED_CARS_WEBSITE')
+
+#Dict of countries supported by the website
 countries = {"Germany": "D",
              "Austria": "A",
              "Belgium" : "B",
@@ -21,6 +27,9 @@ pattern_manufacturer = re.compile(r'\"makeId\":(.*?),\"modelOrModelLineId\":(.*?
 pattern_vendor_location = re.compile('"location":{"countryCode":"?(.*?)"?,"zip":"?(.*?)"?,"city":"?(.*?)"?,\"street\":"?(.*?)"?,')
 
 def initWS():
+    if not used_cars_website:
+        print('Used cars website URL not found')
+        exit()
     if not os.path.isdir("data"):
         os.mkdir("data")
     path_to_visited_urls = os.path.join("data", "visited_urls.json")
@@ -30,10 +39,10 @@ def initWS():
 
 def get_car_URLs(country, numpages, offsetpag, db=False):
     car_URLs = []
-    #Iterating all the Web Pages with the search results
+    #Iterating all the Web Pages within the search results
     for page in range(1+offsetpag,1+offsetpag+numpages):
         try:
-            url = 'https://www.autoscout24.it/lst?sort=age&desc=1&ustate=N%2CU&size=20&page='+str(page)+ '&cy=' + countries[country] +'&atype=C'
+            url = used_cars_website+'/lst?sort=age&desc=1&ustate=N%2CU&size=20&page='+str(page)+ '&cy=' + countries[country] +'&atype=C'
             only_a_tags = SoupStrainer("a")
             soup = BeautifulSoup(urllib.request.urlopen(url).read(),'lxml', parse_only=only_a_tags)
         except Exception as e:
@@ -48,7 +57,7 @@ def get_car_dict(URL, db=False):
     car_dict = {}
     car_dict["country"] = country
     car_dict["date"] = str(datetime.now())
-    car = BeautifulSoup(urllib.request.urlopen('https://www.autoscout24.it'+URL).read(),'lxml')
+    car = BeautifulSoup(urllib.request.urlopen(used_cars_website+URL).read(),'lxml')
 
     #Manufacturer data
     manufacturer_res = re.findall(pattern_manufacturer, car.find(id="__NEXT_DATA__").text)
