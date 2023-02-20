@@ -16,13 +16,13 @@ main_columns = sorted(['Acconto', 'Anno', 'Carburante', 'Carrozzeria', 'Chilomet
                        ]
                       )
 
-path_to_added_batches = os.path.join("data", "added_batches.json")
-path_to_full_dataset = os.path.join("data", "autoscout_dataset.csv")
+path_to_added_batches = os.path.join("..", "data", "added_batches.json")
+path_to_full_dataset = os.path.join("..", "data", "usedcars_dataset.csv")
 
 
 def initWSCleaner():
-    if not os.path.isdir("data"):
-        os.mkdir("data")
+    if not os.path.isdir(os.path.join("..", "data")):
+        os.mkdir(os.path.join("..", "data"))
 
     if not os.path.isfile(path_to_added_batches):
         with open(path_to_added_batches, "w") as file:
@@ -36,7 +36,7 @@ def initWSCleaner():
 def getTargets(target, added_batches):
 
     if target:
-        file_path = os.path.join("data", target)
+        file_path = os.path.join("..", "data", target)
         # Filepath must be a .csv file, different from main dataset
         if os.path.isfile(file_path) and file_path.endswith(".csv") and file_path != path_to_full_dataset:
             target_list = [target]
@@ -45,8 +45,8 @@ def getTargets(target, added_batches):
             target_list = []
     else:
         # Target all csv in data folder
-        target_list = [file for file in sorted(os.listdir("data"))
-                       if file.endswith(".csv") and file != "autoscout_dataset.csv"]
+        target_list = [file for file in sorted(os.listdir(os.path.join("..", "data")))
+                       if file.endswith(".csv") and file != "usedcars_dataset.csv"]
 
     target_list = [tar for tar in target_list if tar not in added_batches]
 
@@ -264,7 +264,7 @@ if __name__ == '__main__':
 
     # Processing target datasets
     for ii, tar in enumerate(targets):
-        df = pd.read_csv(os.path.join("data", tar), sep=";", index_col='url')
+        df = pd.read_csv(os.path.join("..", "data", tar), sep=";", index_col='url')
         print(f"Processing dataset {tar} ({ii+1}/{len(targets)})", end="\r")
         try:
             df = clean_data(df)

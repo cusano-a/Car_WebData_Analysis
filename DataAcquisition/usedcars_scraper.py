@@ -30,9 +30,9 @@ def initWS():
     if not used_cars_website:
         print('Used cars website URL not found')
         exit()
-    if not os.path.isdir("data"):
-        os.mkdir("data")
-    path_to_visited_urls = os.path.join("data", "visited_urls.json")
+    if not os.path.isdir(os.path.join("..", "data")):
+        os.mkdir(os.path.join("..", "data"))
+    path_to_visited_urls = os.path.join("..", "data", "visited_urls.json")
     if not os.path.isfile(path_to_visited_urls):
         with open(path_to_visited_urls,"w") as file:
             json.dump([],file)
@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
     #Check/Create folders for results
     initWS()
-    path_to_visited_urls = os.path.join("data", "visited_urls.json")
+    path_to_visited_urls = os.path.join("..", "data", "visited_urls.json")
 
     #In Debug mode not skip already processed cars
     if db:
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 
     #Results container
     multiple_cars_dict = {}
-    fullsavename = os.path.join('data', filesavename)
+    fullsavename = os.path.join("..", "data", filesavename)
 
     #Getting car detail URL from all pages
     car_URLs = get_car_URLs(country, numpages, offsetpag, db)

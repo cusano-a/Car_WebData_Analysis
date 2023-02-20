@@ -140,6 +140,7 @@ models/
 
 #Other
 .DS_Store
+Modeling/WebScraping_TestGetData.ipynb
 
 #VSCode
 .vscode

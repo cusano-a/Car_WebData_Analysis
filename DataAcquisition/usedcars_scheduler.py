@@ -6,16 +6,10 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 
 
 def get_scraper_path():
-    return os.path.join(".", "autoscout_scraper.py")
-
-
-def get_test_path():
-    return os.path.join(".", "loadtest.py")
-
+    return os.path.join(".", "usedcars_scraper.py")
 
 def get_python_command():
     return sys.executable
-
 
 def run_scraper(python_command, scraper_path):
     print(f'Scraper running at {datetime.now()}')
