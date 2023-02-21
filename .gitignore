@@ -137,10 +137,11 @@ Report/
 data/
 catboost_info/
 models/
+cache
 
 #Other
 .DS_Store
-Modeling/WebScraping_TestGetData.ipynb
+WebScraping_TestGetData.ipynb
 
 #VSCode
 .vscode
