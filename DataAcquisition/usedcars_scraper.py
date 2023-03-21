@@ -25,6 +25,7 @@ countries = {"Germany": "D",
 #Regex for manufacturer data and vendor location data
 pattern_manufacturer = re.compile(r'\"makeId\":(.*?),\"modelOrModelLineId\":(.*?),\"make\":"?(.*?)"?,\"model\":"?(.*?)"?,\"modelVersionInput\":"?(.*?)"?,')
 pattern_vendor_location = re.compile('"location":{"countryCode":"?(.*?)"?,"zip":"?(.*?)"?,"city":"?(.*?)"?,\"street\":"?(.*?)"?,')
+PRICE_TAG = "PriceInfo_price__JPzpT" # Tag of the Div containing the price
 
 def initWS():
     if not used_cars_website:
@@ -76,7 +77,7 @@ def get_car_dict(URL, db=False):
 
     car_dict["dealer"] = car.find("div",attrs={"class":"cldt-vendor-contact-box","data-vendor-type":"dealer"}) != None
     car_dict["privateSeller"] = car.find("div",attrs={"class":"cldt-vendor-contact-box","data-vendor-type":"privateseller"}) != None
-    car_dict["price"] =  car.find("span",attrs={"class":"StandardPrice_price__X_zzU"}).text
+    car_dict["price"] =  car.find("span",attrs={"class":PRICE_TAG}).text
 
     #Vendor Location Data
     location_res =  re.findall(pattern_vendor_location, car.find(id="__NEXT_DATA__").text)
