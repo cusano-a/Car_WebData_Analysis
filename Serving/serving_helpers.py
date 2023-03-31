@@ -14,6 +14,10 @@ def load_data(nrows: int):
         "Chilometraggio",
         "potenza_cv",
         "Carburante",
+        "Carrozzeria",
+        "Cilindrata_cm3",
+        "Tipo_di_cambio",
+        "Trazione",
         "price",
     ]
     data = pd.read_csv(
@@ -51,18 +55,56 @@ def pack_inputs(**inputs_unpacked):
     inputs_packed = {key: [value] for key, value in inputs_unpacked.items()}
     return inputs_packed
 
+
 @st.cache_data
 def get_makers(num_makers=40):
     data = load_data(None)
-    makers = data.value_counts(['maker']).sort_values(ascending=False)
-    num_makers= min(len(makers), num_makers)
-    makers = makers.reset_index().loc[:num_makers, 'maker'].to_numpy()
+    makers = data.value_counts(["maker"]).sort_values(ascending=False)
+    num_makers = min(len(makers), num_makers)
+    makers = makers.reset_index().loc[:num_makers, "maker"].to_numpy()
     return np.sort(makers)
+
 
 @st.cache_data
 def get_models(maker, num_models=30):
     data = load_data(None).query("maker==@maker")
-    models = data.value_counts(['model']).sort_values(ascending=False)
+    models = data.value_counts(["model"]).sort_values(ascending=False)
     num_models = min(len(models), num_models)
-    models = models.reset_index().loc[:num_models, 'model'].to_numpy()
+    models = models.reset_index().loc[:num_models, "model"].to_numpy()
     return np.sort(models)
+
+
+@st.cache_data
+def get_aggregates_by_model():
+    data = load_data(None)
+    aggregated_data = (
+        data.groupby(["maker", "model"])
+        .agg(
+            model_count=pd.NamedAgg(column="model", aggfunc="count"),
+            price_sum=pd.NamedAgg(column="price", aggfunc="sum"),
+        )
+        .reset_index()
+    )
+    return aggregated_data
+
+
+@st.cache_data
+def get_top_selling_models(num_models=10):
+    df = get_aggregates_by_model()
+    df = df.sort_values(by="model_count", ascending=False)
+    df = df.head(num_models)
+    df["maker_model"] = df["maker"] + " " + df["model"]
+    df = df[["maker_model", "model_count"]]
+    df = df.rename(
+        columns={"maker_model": "Model", "model_count": "Number of Offers"}
+    ).reset_index(drop=True)
+    return df
+
+
+@st.cache_data
+def get_top_value_makers(num_makers=10):
+    df = get_aggregates_by_model()
+    df = df.groupby(by="maker").agg({"price_sum": "sum"})
+    df = df.sort_values(by="price_sum", ascending=False).reset_index().head(num_makers)
+    df = df.rename(columns={"maker": "Maker", "price_sum": "Sum of Prices"})
+    return df
