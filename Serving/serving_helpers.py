@@ -23,6 +23,7 @@ def filter_usedcars_data(
 @st.cache_data
 def load_data(nrows: int):
     columns = [
+        "date",
         "maker",
         "model",
         "Anno",
@@ -46,6 +47,7 @@ def load_data(nrows: int):
     lowercase = lambda x: str(x).lower()
     data.rename(lowercase, axis="columns", inplace=True)
     data["anno"] = pd.to_datetime(data["anno"])
+    data["date"] = pd.to_datetime(data["date"])
     return data
 
 
@@ -170,3 +172,12 @@ def get_car_prices_by_year(num_years=30):
         df = df.tail(num_years)
     print(df.dtypes)
     return df
+
+@st.cache_data
+def get_gauges():
+    data = load_data(None)
+    num_offers = f"{len(data):d}"
+    median_price = f"{data['price'].median():.0f} €"
+    median_age = ((data['date']-data['anno']).median())/ np.timedelta64(1, 'Y')
+    median_age = f"{median_age:.1f} Y"
+    return num_offers, median_price, str(median_age)
