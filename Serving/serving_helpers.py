@@ -173,11 +173,48 @@ def get_car_prices_by_year(num_years=30):
     print(df.dtypes)
     return df
 
+
 @st.cache_data
 def get_gauges():
     data = load_data(None)
     num_offers = f"{len(data):d}"
     median_price = f"{data['price'].median():.0f} €"
-    median_age = ((data['date']-data['anno']).median())/ np.timedelta64(1, 'Y')
+    median_age = ((data["date"] - data["anno"]).median()) / np.timedelta64(1, "Y")
     median_age = f"{median_age:.1f} Y"
     return num_offers, median_price, str(median_age)
+
+
+@st.cache_data
+def edit_columns_display(df):
+    columns_translation = {
+        "anno": "Registration Date",
+        "date": "Offer Date",
+        "maker": "Maker",
+        "model": "Model",
+        "chilometraggio": "Mileage (Km)",
+        "potenza_cv": "Power (CV)",
+        "carburante": "Fuel Type",
+        "carrozzeria": "Body Type",
+        "cilindrata_cm3": "Engine Size (cm3)",
+        "tipo_di_cambio": "Gear Type",
+        "trazione": "Wheel Drive",
+        "price": "Price (€)",
+    }
+    df = df.rename(columns=columns_translation)
+    df = df.reindex(
+        columns=[
+            "Maker",
+            "Model",
+            "Registration Date",
+            "Price (€)",
+            "Mileage (Km)",
+            "Fuel Type",
+            "Gear Type",
+            "Power (CV)",
+            "Engine Size (cm3)",
+            "Wheel Drive",
+            "Body Type",
+            "Offer Date",
+        ]
+    )
+    return df
