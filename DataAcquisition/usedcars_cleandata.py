@@ -53,7 +53,7 @@ main_columns = sorted(
 )
 
 path_to_added_batches = os.path.join("..", "data", "added_batches.json")
-path_to_full_dataset = os.path.join("..", "data", "usedcars_dataset.csv")
+path_to_full_dataset = os.path.join("..", "data", "usedcars_dataset.parquet")
 
 
 def initWSCleaner():
@@ -66,7 +66,8 @@ def initWSCleaner():
 
     if not os.path.isfile(path_to_full_dataset):
         df = pd.DataFrame(columns=main_columns)
-        df.to_csv(path_to_full_dataset, sep=";", index_label="url")
+        df.index.name = "url"
+        df.to_parquet(path_to_full_dataset, index=True)
 
 
 def getTargets(target, added_batches):
@@ -355,10 +356,11 @@ if __name__ == "__main__":
     if refresh:
         added_batches = []
         df_main = pd.DataFrame(columns=main_columns)
+        df_main.index.name = "url"
     else:
         with open(path_to_added_batches) as file:
             added_batches = json.load(file)
-        df_main = pd.read_csv(path_to_full_dataset, sep=";", index_col="url")
+        df_main = pd.read_parquet(path_to_full_dataset)
 
     # Getting target list
     targets = getTargets(target, added_batches)
@@ -386,6 +388,6 @@ if __name__ == "__main__":
     print(f"Main dataset now contains {len(df_main)} records")
     # Saving results
     if len(targets) > 0:
-        df_main.to_csv(path_to_full_dataset, sep=";", index_label="url")
+        df_main.to_parquet(path_to_full_dataset, index=True)
         with open(path_to_added_batches, "w") as file:
             json.dump(added_batches, file)

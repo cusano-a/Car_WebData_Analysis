@@ -36,14 +36,14 @@ def load_data(nrows: int):
         "Trazione",
         "price",
     ]
-    data = pd.read_csv(
-        os.path.join("..", "data", "usedcars_dataset.csv"),
-        nrows=nrows,
-        sep=";",
-        usecols=columns,
+    data = pd.read_parquet(
+        os.path.join("..", "data", "usedcars_dataset.parquet"),
+        columns=columns,
     )
     data = data.dropna()
     data = filter_usedcars_data(data)
+    data = data.reset_index(drop=True)
+    data = data.head(nrows)
     lowercase = lambda x: str(x).lower()
     data.rename(lowercase, axis="columns", inplace=True)
     data["anno"] = pd.to_datetime(data["anno"])
