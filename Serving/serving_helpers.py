@@ -1,6 +1,6 @@
-import pandas as pd
-import numpy as np
 import os
+import numpy as np
+import pandas as pd
 import streamlit as st
 import joblib
 from datetime import datetime
@@ -170,7 +170,6 @@ def get_car_prices_by_year(num_years=30):
     df["anno"] = df["anno"].astype("int64")
     if num_years:
         df = df.tail(num_years)
-    print(df.dtypes)
     return df
 
 

@@ -1,8 +1,6 @@
 import streamlit as st
-import matplotlib.pyplot as plt
-import seaborn as sns
-import serving_helpers
 import altair as alt
+import serving_helpers
 
 st.title("Used Cars in Italy 🚗 ")
 
