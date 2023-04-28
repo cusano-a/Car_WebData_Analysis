@@ -1,8 +1,8 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/)
 
-# A Car Web Data Project
+# A Cars Web Data Project
 
-This is a personal project about the used cars market in Italy.
+This is a personal project about the used cars market in Italy. Its content is for **educational purposes only**.
 
 The data were collected from December 2022 to March 2023 from a large European online car market.
 However only offers from Italy were collected.
@@ -26,6 +26,6 @@ A collection of jupyter-notebooks used to:
 
 
 ## Serving
-A small web app made in streamlit. You can find:
+A small web app made in Streamlit. You can find:
 - a **Dashboard** showing the main metrics and plots about the collected data
 - a **Car Evaluator** where you can insert the features of your car (e.g. model, age and power) to obtain a real time estimate of its value.
