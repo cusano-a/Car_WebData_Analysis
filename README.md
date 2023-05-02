@@ -29,3 +29,10 @@ A collection of jupyter-notebooks used to:
 A small web app made in Streamlit. You can find:
 - a **Dashboard** showing the main metrics and plots about the collected data
 - a **Car Evaluator** where you can insert the features of your car (e.g. model, age and power) to obtain a real time estimate of its value.
+
+<p align="center">
+  <img width="500" src="/Screenshots/Dashboard%201.png"> <img width="500"src="/Screenshots/Dashboard%202.png">
+</p>
+<p align="center">
+  <img width="600" src="/Screenshots/Evaluator.png">
+</p>
